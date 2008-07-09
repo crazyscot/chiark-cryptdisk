@@ -1,10 +1,10 @@
 #
 
-cd /root/crypt-disk-backup
+cd /usr/lib/chiark-cryptdisk
 
 fail () { echo >&2 "$*"; exit 127; }
 
-. config
+. /etc/chiark-cryptdisk/config
 
 case "$dev" in
 *" "*)	fail "more than one possible device: $dev" ;;
@@ -16,7 +16,7 @@ echo "using device $dev"
 echo "using devmapper name $mapname"
 echo "using mountpoint $mnt"
 
-mkdir -p -m700 tmp $mnt
+mkdir -p -m700 ${TMP} $mnt
 
 our_dd () { dd "$@" 2>&1 |dd_seddery; test "${PIPESTATUS[*]}" = "0 0"; }
 
@@ -30,9 +30,9 @@ dd_seddery () { sed -e '
 do_dmsetup () {
 	carelessly undo_mount
 	carelessly undo_dmsetup
-	grep " $dev\$" /proc/partitions >tmp/dev-partition
-	read <tmp/dev-partition major minor size
-	cryptsetup create -c aes -d keys/$1 -o 1 $mapname /dev/$dev
+	grep " $dev\$" /proc/partitions >${TMP}/dev-partition
+	read <${TMP}/dev-partition major minor size
+	cryptsetup create -c aes -d ${KEYS}/$1 -o 1 $mapname /dev/$dev
 }
 undo_dmsetup () {
 	dmsetup remove $mapname
@@ -47,15 +47,15 @@ undo_mount () {
 
 do_identify () {
 	printf 'reading partition table... '
-	our_dd count=1 if=/dev/$dev of=tmp/dev-parttable
+	our_dd count=1 if=/dev/$dev of=${TMP}/dev-parttable
 	echo done.
-	our_dd if=tmp/dev-parttable of=tmp/dev-identifier-magic bs=1 count=16
-	cmp tmp/dev-identifier-magic keys/identifier-magic.bin
+	our_dd if=${TMP}/dev-parttable of=${TMP}/dev-identifier-magic bs=1 count=16
+	cmp ${TMP}/dev-identifier-magic ${KEYS}/identifier-magic.bin
 	echo 'identifier magic is correct.'
-	our_dd if=tmp/dev-parttable of=tmp/key-id.bin bs=1 count=16 skip=16
-	bin2hex tmp/key-id
-	keyid=`cat tmp/key-id.hex`
-	if ! test -f keys/$keyid; then
+	our_dd if=${TMP}/dev-parttable of=${TMP}/key-id.bin bs=1 count=16 skip=16
+	bin2hex ${TMP}/key-id
+	keyid=`cat ${TMP}/key-id.hex`
+	if ! test -f ${KEYS}/$keyid; then
 		printf >&2 'disk uses key %s which we do not have.\n' $keyid
 		exit 127
 	fi

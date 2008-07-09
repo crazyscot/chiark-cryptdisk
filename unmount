@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 export NO_CRYPTDISK_MOUNT=1
-. /root/crypt-disk-backup/functions >/dev/null
+. /usr/lib/chiark-cryptdisk/functions >/dev/null
 test $# = 0 || fail "usage: .../unmount"
 carelessly undo_mount
 carelessly undo_dmsetup
@@ -16,8 +16,11 @@ if dmsetup ls | grep "^$mapname[ 	]" >/dev/null; then
 	exit 1
 fi
 
-if lsmod | grep -F ata_piix >/dev/null; then
-	rmmod ata_piix
+
+if test ${NO_RMMOD} = 0; then
+	if lsmod | grep -F $MODULE >/dev/null; then
+		rmmod $MODULE 
+	fi
 fi
 
 echo 'all detached.'

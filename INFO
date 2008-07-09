@@ -1,0 +1,12 @@
+1. Teach the scripts how to detect your backup drive.
+In our setups, this typically means figuring out the module
+See [XXX]/search-for-sata and [XXX]/config.
+
+
+XXX TODO: Add hdparm -qf DEVICE and hdparm -Y DEVICE to make it flush and sleep.
+
+Depends: dmsetup, bsdmainutils, cryptsetup
+
+Keys are stored in /etc/chiark-cryptdisk/keys. YOU MUST BACK THIS DIRECTORY UP BY OTHER MEANS; without a copy, you will be unable to read your backups if you ever need to rely on them!
+Put it on a USB stick, burn it onto a CD, doesn't quite matter what, but you will need the contents of that directory - along with the scripts in this package - if you need to mount a cryptdisk on another system or restore from it.
+

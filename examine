@@ -1,5 +1,5 @@
 #!/bin/bash -e
-. /root/crypt-disk-backup/functions
+. /usr/lib/chiark-cryptdisk/functions
 
 ro=-r
 case "$1" in

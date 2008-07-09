@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-. /root/crypt-disk-backup/functions
+. /usr/lib/chiark-cryptdisk/functions
 
 fill=false
 case "$1" in
@@ -9,23 +9,23 @@ esac
 test $# = 1 || fail "usage: .../initialise_disk [--fill] disk-id"
 disk_id="$1"
 
-our_dd count=1 if=/dev/$dev of=tmp/dev-parttable
-our_dd count=1 if=/dev/zero of=tmp/zero-parttable
-our_dd count=1 if=/dev/zero of=tmp/magiconly-parttable
-cat keys/identifier-magic.bin 1<>tmp/magiconly-parttable
-cmp tmp/dev-parttable tmp/zero-parttable || \
- cmp tmp/dev-parttable tmp/magiconly-parttable
+our_dd count=1 if=/dev/$dev of=${TMP}/dev-parttable
+our_dd count=1 if=/dev/zero of=${TMP}/zero-parttable
+our_dd count=1 if=/dev/zero of=${TMP}/magiconly-parttable
+cat ${KEYS}/identifier-magic.bin 1<>${TMP}/magiconly-parttable
+cmp ${TMP}/dev-parttable ${TMP}/zero-parttable || \
+ cmp ${TMP}/dev-parttable ${TMP}/magiconly-parttable
 
 echo "disk blank check successful"
-our_dd if=/dev/urandom of=tmp/new-boot-sector count=1
-cat keys/identifier-magic.bin keys/current-key-id.bin 1<>tmp/new-boot-sector
+our_dd if=/dev/urandom of=${TMP}/new-boot-sector count=1
+cat ${KEYS}/identifier-magic.bin ${KEYS}/current-key-id.bin 1<>${TMP}/new-boot-sector
 
 kill_dmsetup=:
 kill_mount=:
 trap 'set +e; $kill_dmsetup; $kill_mount; exit 127' 0
 
 kill_dmsetup='carelessly undo_dmsetup'
-do_dmsetup `cat keys/current-key-id.hex`
+do_dmsetup `cat ${KEYS}/current-key-id.hex`
 
 if $fill; then
 	printf "zeroing... "
@@ -49,7 +49,7 @@ undo_mount
 kill_mount=:
 undo_dmsetup
 kill_dmsetup=:
-our_dd if=tmp/new-boot-sector of=/dev/$dev
+our_dd if=${TMP}/new-boot-sector of=/dev/$dev
 
 echo done.
 trap '' 0

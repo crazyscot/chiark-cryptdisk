@@ -4,7 +4,9 @@ set -e
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 export PATH
 
-cd /root/crypt-disk-backup
+host=`hostname`
+
+cd /usr/lib/crypt-disk-backup
 with-lock-ex -f lock bash -xec '
  savelog -c 7 logfile
  result=successful
@@ -13,6 +15,6 @@ with-lock-ex -f lock bash -xec '
   ./main
   ./unmount
  " >logfile 2>&1 || result=FAILED
- mail -s "relativity backup $result" ian@davenant.greenend.org.uk <logfile
+ mail -s "${host} backup $result" ${MAILTO} <logfile
  ./unmount
 '

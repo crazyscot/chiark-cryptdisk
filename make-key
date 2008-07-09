@@ -1,34 +1,34 @@
 #!/bin/bash
 set -e
-. /root/crypt-disk-backup/functions
+. /usr/lib/chiark-cryptdisk/functions
 test $# = 0 || fail "usage: .../make-key"
 
 generate_thing () {
-	our_dd if=/dev/urandom bs=1 count=16 of=keys/$1.bin
-	hexdump -e '16 1 "%02x" "\n"' <keys/$1.bin >keys/$1.hex
-	thing_hex=`cat keys/$1.hex`
+	our_dd if=/dev/urandom bs=1 count=16 of=${KEYS}/$1.bin
+	hexdump -e '16 1 "%02x" "\n"' <${KEYS}/$1.bin >${KEYS}/$1.hex
+	thing_hex=`cat ${KEYS}/$1.hex`
 }
 
-if ! test -f keys/identifier-magic.bin; then
+if ! test -f ${KEYS}/identifier-magic.bin; then
 	generate_thing identifier-magic
 	echo "identifier $thing_hex chosen"
 else
-	identifier=`cat keys/identifier-magic.hex`
+	identifier=`cat ${KEYS}/identifier-magic.hex`
 	echo "identifier $identifier already set"
 fi
 
 generate_thing new-key-id 
 keyid=$thing_hex
 
-our_dd if=/dev/urandom bs=1 count=16 of=keys/new-key-id.bin
-bin2hex keys/new-key-id
-keyid_hex=`cat keys/new-key-id.hex`
+our_dd if=/dev/urandom bs=1 count=16 of=${KEYS}/new-key-id.bin
+bin2hex ${KEYS}/new-key-id
+keyid_hex=`cat ${KEYS}/new-key-id.hex`
 
-mkdir -p -m700 keys
-our_dd if=/dev/urandom bs=1 count=32 of=keys/$keyid_hex
+mkdir -p -m700 ${KEYS}
+our_dd if=/dev/urandom bs=1 count=32 of=${KEYS}/$keyid_hex
 
-rm -f keys/current-key-id.hex
-mv keys/new-key-id.bin keys/current-key-id.bin
-mv keys/new-key-id.hex keys/current-key-id.hex
+rm -f ${KEYS}/current-key-id.hex
+mv ${KEYS}/new-key-id.bin ${KEYS}/current-key-id.bin
+mv ${KEYS}/new-key-id.hex ${KEYS}/current-key-id.hex
 
 echo "key $keyid_hex generated"

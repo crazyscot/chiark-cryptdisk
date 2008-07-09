@@ -1,10 +1,7 @@
 #!/bin/sh
 set -e
 
-MODULE=sata_sil
-# TODO: Configuration step here - this must be the module required to load
-# the module needed to recognise your backup drive. 
-# For example, ata_piix or sata_sil.
+. /etc/chiark-cryptdisk/config
 
 if ! lsmod | egrep '^'${MODULE}' ' >/dev/null \
     && [ x$NO_CRYPTDISK_MOUNT = x ]; then
