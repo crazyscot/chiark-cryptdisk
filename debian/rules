@@ -4,6 +4,8 @@ export DH_COMPAT=4
 
 SHELL=/bin/bash
 
+PKG=chiark-cryptdisk
+
 subdirs_build=	
 subdirs_nobuild=chiark-cryptdisk
 package=	chiark-utils
@@ -11,6 +13,7 @@ packages_indep=	chiark-cryptdisk
 packages_arch=	
 packages=	$(packages_indep) $(packages_arch)
 
+# XXX KILL THESE:
 cwd=	$(shell pwd)
 d=	$(cwd)/debian
 t=	$d/tmp
@@ -22,59 +25,40 @@ build:
 
 clean:
 	dh_testdir
+	dh_testroot
 	rm -f build
-	set -e; for s in $(subdirs_build); do \
-		$(MAKE) -C $$s -i distclean || \
-		$(MAKE) -C $$s -f Makefile.in distclean; \
-	done
+	$(MAKE) -C $(PKG) distclean
 	dh_clean
-	rm -rf *~ debian/tmp debian/*~ debian/files* debian/substvars*
 
-binary-prep:
-	dh_testdir
-	rm -rf debian/tmp*
-	#
-	set -e; for s in $(subdirs_build) $(subdirs_nobuild); do \
-		$(MAKE) -C $$s install install-docs install-examples \
-			prefix=$t/$$s/usr \
-			etcdir=$t/$$s/etc/chiark-cryptdisk \
-			varlib=$t/$$s/var/lib \
-			mandir=$t/$$s/usr/share/man; \
-	done
-	#
-	set -e; for p in $(packages); do \
-		install -d $t/$$p/DEBIAN $t/$$p/usr/share/doc/$$p; \
-		cp debian/copyright debian/changelog \
-			$t/$$p/usr/share/doc/$$p/; \
-		ln -s changelog.gz \
-			$t/$$p/usr/share/doc/$$p/changelog.Debian.gz; \
-		gzip -9v $t/$$p/usr/share/doc/$$p/changelog; \
-		done
-	#
-	gzip -9f $t/*/usr/share/man/man*/*
+pfx=$(CURDIR)/debian/$(PKG)
 
-binary-one:
-	set -e; for f in preinst postinst prerm postrm conffiles; do \
-		test -f debian/$p/$$f || continue; \
-		cp debian/$p/$$f $t/$p/DEBIAN/$$f; \
-		chmod u=rwX,go=rX $t/$p/DEBIAN/$$f; \
-	done
-	dh_fixperms
-	dh_installdeb
-	#dh_gencontrol -p$p
-	dpkg-gencontrol -isp -p$p -P$t/$p -Tdebian/sv-$p
-	dh_md5sums
-	#dh_builddeb
-	dpkg --build $t/$p ..
-
-binary-indep:	build binary-prep
+install: build
 	dh_testdir
 	dh_testroot
-	#dh_clean -k
-	set -e; for p in $(packages_indep); do \
-		debian/rules binary-one p=$$p; done
+	dh_clean -k
+	dh_installdirs
+	$(MAKE) -C $(PKG) install \
+	  	prefix=$(pfx) \
+	  	libdir=$(pfx)/usr/lib/chiark-cryptdisk \
+		sbindir=$(pfx)/usr/sbin
 
-binary-arch:	build binary-prep
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdebconf
+	dh_installdocs
+#	dh_installexamples
+#	dh_installcron
+	dh_installman
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
 
 binary:		binary-indep binary-arch
 

@@ -27,7 +27,7 @@ INSTALL_SCRIPT=		$(INSTALL) -m 755 -o root -g $(SYSTEM_GROUP)
 INSTALL_DIRECTORY=	$(INSTALL) -m 2755 -o root -g $(SYSTEM_GROUP) -d
 
 prefix=/usr/local
-sbindir=$(prefix)/bin
+sbindir=$(prefix)/sbin
 libdir=$(prefix)/lib/chiark-cryptdisk
 etcdir=$(prefix)/etc/chiark-cryptdisk
 
@@ -45,7 +45,6 @@ SCRIPTS=initialise-disk make-key
 MANPAGES5=	
 MANPAGES8=	chiark-cryptdisk-initialise-disk \
 		chiark-cryptdisk-make-key
-EXAMPLES=	linux bsd
 
 all:
 
