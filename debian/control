@@ -1,0 +1,29 @@
+Source: chiark-cryptdisk
+Section: admin
+Priority: extra
+Maintainer: Ross Younger <ryounger@chiark.greenend.org.uk>
+Standards-Version: 3.2.1.0
+
+Package: chiark-cryptdisk
+Section: admin
+Priority: extra
+Architecture: all
+Depends: dmsetup, bsdmainutils, cryptsetup, chiark-utils-bin (>= 4.0.0)
+Description: encrypted backup drive scripts
+ These are the encrypted backup scripts used by various systems belonging
+ to the Sinister Greenend Organisation. Features:
+  * back up to any random-access block device
+  * backups are strongly encrypted using AES
+  * contents of backup media are indistinguishable from random data,
+    to the casual observer
+  * XXX WRITE MORE? - crypto properties?
+
+ This package contains the main backup and utility scripts for creating
+ keys and initialising new backup devices. (Recommended: SATA drives
+ with hotpluggable caddyless enclosures.)
+
+ WARNING: Merely installing this package does not mean you have achieved 
+ encrypted backups! A modicum of sysadmin attention is required to get
+ them working.  When correctly installed and running, a report on every
+ (attempted) backup run will be sent to an email address which you nominate.
+

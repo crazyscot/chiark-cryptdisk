@@ -1,0 +1,31 @@
+This package contains some of the utilities from Ian Jackson's private
+system `chiark.greenend.org.uk'.
+
+This package, containing the moderately portable sources and Debian
+packaging information, and the resulting Debian binary packages, was
+put together by Ian, but with assistance from other chiark users.  For
+both upstream and Debian packaging questions, please contact
+chiark-utils-maint@chiark.greenend.org.uk.
+
+
+The software included is:
+
+chiark-cryptdisk: encrypted backup drive scripts
+ Copyright XXX Ian Jackson <ian@chiark.greenend.org.uk>
+
+The chiark utilities are all free software; you can redistribute them
+and/or modify them under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 3 of the
+License, or (at your option) any later version.
+
+These programs are distributed in the hope that they will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License with
+your Debian GNU/Linux system, in /usr/share/common-licenses/GPL-3, or
+with the chiark-utils source package as the file COPYING; if not,
+email me at one of the addresses above or consult the Free Software
+Foundation's website at www.fsf.org, or the GNU Project website at
+www.gnu.org.
