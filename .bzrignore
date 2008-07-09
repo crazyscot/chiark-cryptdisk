@@ -1,0 +1,4 @@
+debian/tmp
+build
+debian/files
+debian/chiark-cryptdisk

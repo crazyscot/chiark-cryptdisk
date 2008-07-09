@@ -43,8 +43,8 @@ LIBFILES=examine functions invoke main main.bigtmp-subdirs main.mirror-subdirs\
 SCRIPTS=initialise-disk make-key
 
 MANPAGES5=	
-MANPAGES8=	chiark-cryptdisk-initialise-disk.8 \
-		chiark-cryptdisk-make-key.8
+MANPAGES8=	chiark-cryptdisk-initialise-disk \
+		chiark-cryptdisk-make-key
 EXAMPLES=	linux bsd
 
 all:
@@ -55,24 +55,22 @@ install:
 			$(INSTALL_SCRIPT) $$f $(sbindir)/chiark-cryptdisk-$$f; done
 		$(INSTALL_DIRECTORY) $(etcdir)
 		set -e; for f in $(ETCFILES); do \
-			$(INSTALL_SHARE) $$f $(sbindir)/$$f; done
+			$(INSTALL_SHARE) $$f $(etcdir)/$$f; done
 		$(INSTALL_DIRECTORY) $(libdir)
 		set -e; for f in $(LIBFILES); do \
-			$(INSTALL_SCRIPT) $$f $(sbindir)/$$f; done
+			$(INSTALL_SCRIPT) $$f $(libdir)/$$f; done
 
 install-docs:
-		$(INSTALL_DIRECTORY) $(man5dir) $(man8dir)
-#		set -e; for f in $(MANPAGES5); do \
-#			$(INSTALL_SHARE) $$f.5 $(man5dir)/$$f.5; done
+		$(INSTALL_DIRECTORY) $(man8dir)
 		set -e; for f in $(MANPAGES8); do \
 			$(INSTALL_SHARE) $$f.8 $(man8dir)/$$f.8; done
 
 install-examples:
-		$(INSTALL_DIRECTORY) $(exampledir)
-		set -e; for e in $(EXAMPLES); do \
-			$(INSTALL_SHARE) sync-accounts.example-$$e \
-				$(exampledir)/sync-accounts.$$e; \
-			done
+#		$(INSTALL_DIRECTORY) $(exampledir)
+#		set -e; for e in $(EXAMPLES); do \
+#			$(INSTALL_SHARE) sync-accounts.example-$$e \
+#				$(exampledir)/sync-accounts.$$e; \
+#			done
 
 clean:
 		rm -f *~ ./#*#
