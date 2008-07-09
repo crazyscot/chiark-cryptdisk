@@ -54,7 +54,7 @@ binary-arch: build install
 	dh_installman
 	dh_link
 	dh_compress
-	dh_fixperms
+	dh_fixperms -X etc/chiark-cryptdisk/keys
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
