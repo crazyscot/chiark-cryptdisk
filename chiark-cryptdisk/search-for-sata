@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-MODULE=shift
+MODULE=$1
 
 if ! lsmod | egrep '^'${MODULE}' ' >/dev/null \
     && [ x$NO_CRYPTDISK_MOUNT = x ]; then
