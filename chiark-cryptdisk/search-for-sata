@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-. /etc/chiark-cryptdisk/config
+MODULE=shift
 
 if ! lsmod | egrep '^'${MODULE}' ' >/dev/null \
     && [ x$NO_CRYPTDISK_MOUNT = x ]; then

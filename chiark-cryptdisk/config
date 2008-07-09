@@ -1,16 +1,16 @@
 
-dev=`/usr/lib/chiark-cryptdisk/search-for-sata`
+# What kernel module is needed to recognise your backup drive, and 
+# should we unload it when we're finished?
+MODULE=sata_sil
+NO_RMMOD=1
+
+dev=`/usr/lib/chiark-cryptdisk/search-for-sata ${MODULE}`
 mapname=cryptbackup
 fstype=ext2
 mkfs_fs_options='-q'
 mnt=/var/tmp/chiark-cryptdisk/mnt
 TMP=/var/tmp/chiark-cryptdisk/tmp
 KEYS=/etc/chiark-cryptdisk/keys
-
-# What kernel module is needed to recognise your backup drive, and 
-# should we unload it when we're finished?
-MODULE=sata_sil
-NO_RMMOD=1
 
 # TODO: Make me debconf'ed?
 MAILTO=root@localhost
