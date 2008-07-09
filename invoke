@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+
+cd /root/crypt-disk-backup
+with-lock-ex -f lock bash -xec '
+ savelog -c 7 logfile
+ result=successful
+ bash -xec "
+  ./examine --rw
+  ./main
+  ./unmount
+ " >logfile 2>&1 || result=FAILED
+ mail -s "relativity backup $result" ian@davenant.greenend.org.uk <logfile
+ ./unmount
+'

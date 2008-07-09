@@ -1,0 +1,14 @@
+#!/bin/bash -e
+. /root/crypt-disk-backup/functions
+
+ro=-r
+case "$1" in
+--rw) ro=''; shift;;
+esac
+test $# = 0 || fail "usage: .../examine [--rw]"
+
+do_identify
+do_dmsetup $keyid
+do_mount $ro
+echo 'mounted.'
+egrep . /dev/null $mnt/disk-id ||:

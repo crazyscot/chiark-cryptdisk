@@ -1,0 +1,56 @@
+#!/bin/bash
+set -e
+. /root/crypt-disk-backup/functions
+
+fill=false
+case "$1" in
+--fill) fill=true; shift;;
+esac
+test $# = 1 || fail "usage: .../initialise_disk [--fill] disk-id"
+disk_id="$1"
+
+our_dd count=1 if=/dev/$dev of=tmp/dev-parttable
+our_dd count=1 if=/dev/zero of=tmp/zero-parttable
+our_dd count=1 if=/dev/zero of=tmp/magiconly-parttable
+cat keys/identifier-magic.bin 1<>tmp/magiconly-parttable
+cmp tmp/dev-parttable tmp/zero-parttable || \
+ cmp tmp/dev-parttable tmp/magiconly-parttable
+
+echo "disk blank check successful"
+our_dd if=/dev/urandom of=tmp/new-boot-sector count=1
+cat keys/identifier-magic.bin keys/current-key-id.bin 1<>tmp/new-boot-sector
+
+kill_dmsetup=:
+kill_mount=:
+trap 'set +e; $kill_dmsetup; $kill_mount; exit 127' 0
+
+kill_dmsetup='carelessly undo_dmsetup'
+do_dmsetup `cat keys/current-key-id.hex`
+
+if $fill; then
+	printf "zeroing... "
+	our_dd if=/dev/zero of=/dev/mapper/$mapname
+	echo done.
+fi
+
+printf "making %s filesystem... " "$fstype"
+mkfs -t $fstype $mkfs_fs_options /dev/mapper/$mapname
+echo done.
+
+printf "writing disk-id %s... " "$disk_id"
+
+kill_mount='carelessly undo_mount'
+do_mount
+echo "$disk_id" >$mnt/disk-id
+echo done.
+
+printf "finishing ... "
+undo_mount
+kill_mount=:
+undo_dmsetup
+kill_dmsetup=:
+our_dd if=tmp/new-boot-sector of=/dev/$dev
+
+echo done.
+trap '' 0
+echo 'all done.'

@@ -1,0 +1,171 @@
+#!/bin/sh
+
+# snaprsync=~ian/things/Chiark-Utils/chiark-utils/backup/snaprsync sh -x ~ian/junk/chiark-to-davenant-backup
+
+dt=/root/crypt-disk-backup/mnt
+
+current=`date -Iminutes`
+
+./make-space $dt 85
+
+mkdir -p $dt/inprogress
+
+anyfailed=false
+
+somethingfailed () {
+	echo >&2 "FAILED [$$] ($bgthing) $*"
+	anyfailed=true
+}
+checkfailed () {
+	if $anyfailed; then echo >&2 "[$$] ($bgthing) at least one failed"; exit 1; fi
+}
+
+runsnaprsync () {
+        name=$1; shift
+	echo
+	echo ===== $name =====
+	${snaprsync:-backup-snaprsync} --sshopts='-i/root/.ssh/id_rsa-dumps' --localprevious=$dt/latest/$name --rsynccompress= \
+		"$@" $dt/inprogress/$name || somethingfailed $name $?
+}
+
+ordinary () {
+	host=$1; shift
+	blockdev=$1; mountpoint=$2; name=$host--$3
+	shift;shift;shift
+	runsnaprsync $name   "$@"        $host $blockdev            $mountpoint
+}
+
+gobackground () {
+	set -e
+	trap 'exit 127' INT TERM
+	echo "----- running $bgthing [$$]"
+}
+backgrounded () {
+	pids="$pids $bgthing:$!"
+	echo "----- spawned $bgthing [$!]"
+	echo "now $pids"
+	sleep 5
+}
+endbackground () {
+	checkfailed
+	echo "----- finished $bgthing [$$] - all ok."
+}
+
+nosnap="--snapkind=nosnap"
+nosums="--summer=true"
+nosnapm="$nosnap $nosums"
+
+echo "master pid: $$"
+
+bgthing=davenant
+(
+gobackground
+ordinary	davenant	/dev/vg_davenant/lv_var		/var		var			--rsyncopts=-I
+ordinary	davenant	/dev/hda2			/		root	$nosnapm	--rsyncopts=-I
+ordinary	davenant	/dev/hda1			/boot		boot	$nosnap		--rsyncopts=-I
+ordinary	davenant	/dev/vg_davenant/lv_u		/u		u			--rsyncopts=-I
+ordinary	davenant	/dev/vg_davenant/lv_mirror	/export/mirror	mirror		$nosums --rsyncopts="-I --files-from=$0.mirror-subdirs -r"
+endbackground
+) &
+backgrounded
+
+bgthing=chiark
+(
+gobackground
+target=`ssh -i/root/.ssh/id_rsa-dumps root@davenant readlink -v /export/bigtmp/chiark/latest`
+sd=$0.bigtmp-subdirs
+sed <$sd >$sd.actual "s,^chiark/LATEST,chiark/$target,"
+
+ordinary	davenant	/dev/vg_davenant/lv_bigtmp	/export/bigtmp	bigtmp	$nosnap	$nosums \
+	--rsyncopts="--files-from=$sd.actual -r" \
+	--rvardir=/var/lib/chiark-backup-2 --retcdir=/etc/chiark-backup-2
+endbackground
+) &
+backgrounded
+
+bgthing=anarres
+(
+gobackground
+ordinary	anarres		/dev/hdc4		/			root	$nosnapm
+ordinary	anarres		/dev/hda1		/dos/c			dosc	$nosnap		--rsyncopts=-I --summer='summer -M'
+ordinary	anarres		/dev/hda6		/dos/d			dosd	$nosnap
+ordinary	anarres		/dev/hdc2		/dos/i			dosi	$nosnap
+ordinary	anarres		/dev/hdc6		/dos/j			dosj	$nosnap
+ordinary	anarres		/dev/hdc7		/slash/ubuntu		ubuntu	$nosnapm
+ordinary	anarres		/dev/vg-anarres/lv-u	/u			u
+ordinary	anarres		/dev/vg-anarres/lv-work	/slash/ubuntu/work	work	$nosums
+endbackground
+) &
+backgrounded
+
+bgthing=xenophobe
+(
+gobackground
+ordinary	xenophobe	/dev/hda3			/		root	$nosnapm
+endbackground
+) &
+backgrounded
+
+bgthing=magrathea
+(
+gobackground
+ordinary	magrathea	/dev/sda1			/		root	$nosnapm
+endbackground
+) &
+backgrounded
+
+#bgthing=lalonde
+#(
+#gobackground
+#ordinary	lalonde		/dev/hda5			/		root	$nosnapm
+#ordinary	lalonde		/dev/hda3			/dos/c		dosc	$nosnap
+#endbackground
+#) &
+#backgrounded
+
+bgthing=MASTER
+
+for hp in $pids; do
+	h=${hp%:*}
+	p=${hp##*:}
+	echo "----- waiting $h [$p]"
+	wait $p || somethingfailed "[$p] $h"
+done
+
+trap '' 0
+checkfailed
+
+cd $dt
+mv -v inprogress $current
+ln -nsf $current latest
+
+exit 0
+
+
+
+
+#ordinary	anarres		/dev/hda2			/		root	$nosnap
+#ordinary	anarres		/dev/hda2			/		root	$nosnap
+#ordinary	anarres		/dev/hda2			/		root	$nosnap
+
+
+
+#		runsnaprsync root   --snapkind=remountrocp chiark /dev/sdb1            /
+
+#/dev/vg_davenant/lv_u  16776700  15637452   1139248      94% /u
+#/dev/vg_davenant/lv_bigtmp 211216076 194242532  16973544      92% /export/bigtmp
+#/dev/vg_davenant/lv_music  38533988  24653528  13880460      64% /export/music
+#/dev/vg_davenant/lv_mirror 241165116 220037788  21127328      92% /export/mirror
+
+
+#o#rdinary 	davenant	/dev/hda2		/		root
+
+#ordinary		/dev/vg-main/lv-u2		/u2		u2
+#ordinary	/dev/vg-main/lv-u3	/u3		u3
+#ordinary	/dev/vg-main/lv-usr	/usr		usr
+#ordinary	/dev/vg-main/lv-var	/var		var		--rsyncopts=-I
+#ordinary	/dev/vg-main/lv-log	/var/log	var-log
+
+#ordinary	/dev/vg-main/lv-news	/var/spool/news	news \
+#  --summer=true \
+#  --rsyncopts="--files-from=$0.news-subdirs -r"

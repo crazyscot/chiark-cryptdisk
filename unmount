@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+export NO_CRYPTDISK_MOUNT=1
+. /root/crypt-disk-backup/functions >/dev/null
+test $# = 0 || fail "usage: .../unmount"
+carelessly undo_mount
+carelessly undo_dmsetup
+if mountpoint -q $mnt; then
+	df -P $mnt >&2
+	echo "device is mounted!" >&2
+	exit 2
+fi
+if dmsetup ls | grep "^$mapname[ 	]" >/dev/null; then
+	dmsetup info $mapname >&2
+	echo "devmapper table $mapname still present!" >&2
+	exit 1
+fi
+
+if lsmod | grep -F ata_piix >/dev/null; then
+	rmmod ata_piix
+fi
+
+echo 'all detached.'

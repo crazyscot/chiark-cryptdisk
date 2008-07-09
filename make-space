@@ -1,0 +1,61 @@
+#!/bin/bash
+set -e
+
+fail () { printf >&2 "%s\n" "$1"; exit 127; }
+
+if [ $# != 2 ]; then
+	fail 'usage: .../make-space <maxusepercent>'
+fi
+
+cd "$1"
+target=$2
+printf "ensuring no fuller than %d%% free\n" "$target"
+
+candidates=""
+count=0
+for candidate in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-2][0-9]:[0-6][0-9][-+][0-9][0-9][0-9][0-9]; do
+	case "$candidate" in
+	\[*)	;;
+	*)	candidates="$candidates $candidate"
+		count=$(( $count+1 ))
+		;;
+	esac
+done
+
+candidates="${candidates# } "
+
+printf "	%d candidates for deletion\n" "$count"
+
+while true; do
+	currently="`df -kP .`"
+	case "$currently" in
+	*"
+/dev/mapper"*" "*[0-9]"% /"*)	;;
+	*)	fail "incomprehensible df output \`$currently'" ;;
+	esac
+
+	currentpct=${currently% *}
+	currentpct=${currentpct##* }
+	case "$currentpct" in
+	[0-9]*%)	;;
+	*)	fail "incomprehensible percentage \`$currentpct' in df output \`$currently'" ;;
+	esac
+
+	currentpct=${currentpct%\%}
+
+	if [ $currentpct -le $target ]; then
+		printf "	%d%% used, enough space\n" "$currentpct"
+		break
+	fi
+
+	todelete="${candidates%% *}"
+	candidates="${candidates#* }"
+	printf "	%d%% used, deleting %s\n" "$currentpct" "$todelete"
+
+	case "$todelete" in
+	*[!\ ]*)	;;
+	*)		fail "nothing to delete" ;;
+	esac
+
+	rm -rf "$todelete"
+done

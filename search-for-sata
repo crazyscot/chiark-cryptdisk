@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+if ! lsmod | egrep '^ata_piix ' >/dev/null \
+    && [ x$NO_CRYPTDISK_MOUNT = x ]; then
+	modprobe ata_piix
+	sleep 1
+fi
+
+find /sys/devices -path '*/driver' -lname '*ata_piix*' -print \
+ | perl -pe 's,/driver$,,' \
+ | xargs -I @ find @ -path '*/host*/target*/*:*:*:*/block:*' -print \
+ | perl -pe 's,.*:,,'

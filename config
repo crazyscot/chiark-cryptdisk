@@ -1,0 +1,6 @@
+
+dev=`./search-for-sata`
+mapname=cryptbackup
+fstype=ext2
+mkfs_fs_options='-q'
+mnt=`pwd`/mnt
