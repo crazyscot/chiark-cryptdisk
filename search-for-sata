@@ -1,13 +1,18 @@
 #!/bin/sh
 set -e
 
-if ! lsmod | egrep '^ata_piix ' >/dev/null \
+MODULE=sata_sil
+# TODO: Configuration step here - this must be the module required to load
+# the module needed to recognise your backup drive. 
+# For example, ata_piix or sata_sil.
+
+if ! lsmod | egrep '^'${MODULE}' ' >/dev/null \
     && [ x$NO_CRYPTDISK_MOUNT = x ]; then
-	modprobe ata_piix
+	modprobe $MODULE
 	sleep 1
 fi
 
-find /sys/devices -path '*/driver' -lname '*ata_piix*' -print \
+find /sys/devices -path '*/driver' -lname '*'${MODULE}'*' -print \
  | perl -pe 's,/driver$,,' \
  | xargs -I @ find @ -path '*/host*/target*/*:*:*:*/block:*' -print \
  | perl -pe 's,.*:,,'
