@@ -3,13 +3,13 @@ Section: admin
 Priority: extra
 Maintainer: Ross Younger <wry-deb@impropriety.org.uk>
 Standards-Version: 3.2.1.0
+Build-Depends: debhelper (>> 3.0.0)
 
 Package: chiark-cryptdisk
 Section: admin
 Priority: extra
 Architecture: all
 Depends: dmsetup, bsdmainutils, cryptsetup, chiark-utils-bin (>= 4.0.0)
-Build-Depends: debhelper (>> 3.0.0)
 Description: encrypted backup drive scripts
  These are the encrypted backup scripts used by various systems belonging
  to the Sinister Greenend Organisation. Features:

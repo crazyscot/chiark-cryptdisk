@@ -25,6 +25,7 @@ INSTALL=		install -c
 INSTALL_SHARE=		$(INSTALL) -m 644 -o root -g $(SYSTEM_GROUP)
 INSTALL_SCRIPT=		$(INSTALL) -m 755 -o root -g $(SYSTEM_GROUP)
 INSTALL_DIRECTORY=	$(INSTALL) -m 2755 -o root -g $(SYSTEM_GROUP) -d
+INSTALL_PRIVDIR=	$(INSTALL) -m 700 -o root -g $(SYSTEM_GROUP) -d
 
 prefix=/usr/local
 sbindir=$(prefix)/sbin
@@ -55,6 +56,8 @@ install:
 		$(INSTALL_DIRECTORY) $(etcdir)
 		set -e; for f in $(ETCFILES); do \
 			$(INSTALL_SHARE) $$f $(etcdir)/$$f; done
+		$(INSTALL_PRIVDIR) $(etcdir)/keys
+		$(INSTALL_SHARE) .dummy $(etcdir)/keys
 		$(INSTALL_DIRECTORY) $(libdir)
 		set -e; for f in $(LIBFILES); do \
 			$(INSTALL_SCRIPT) $$f $(libdir)/$$f; done
