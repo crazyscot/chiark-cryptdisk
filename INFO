@@ -1,9 +1,17 @@
 1. Teach the scripts how to detect your backup drive.
-In our setups, this typically means figuring out the module
-See [XXX]/search-for-sata and [XXX]/config.
+   This typically means figuring out the kernel module needed 
+   See /usr/lib/chiark-cryptdisk/search-for-sata.
+   Set the module name in /etc/chiark-cryptdisk/config.
 
+2. Create an initial key with chiark-cryptdisk-make-key
+3. Create one or more backup drives using chiark-cryptdisk-initialisedisk.
+   We recommend you use the --fill option which fills the encrypted drive
+   with zeroes (i.e. what looks to an observer like random data) before
+   creating the filesystem on it.
+4. Every now and then - perhaps before adding a new drive - roll over to
+   a new key, with chiark-cryptdisk-make-key.
 
-XXX TODO: Add hdparm -qf DEVICE and hdparm -Y DEVICE to make it flush and sleep.
+XXX TODO: Add hdparm -qf DEVICE and hdparm -Y DEVICE to make it flush and sleep?
 
 Depends: dmsetup, bsdmainutils, cryptsetup
 

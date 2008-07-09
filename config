@@ -12,3 +12,6 @@ KEYS=/etc/chiark-cryptdisk/keys
 MODULE=sata_sil
 NO_RMMOD=1
 
+# TODO: Make me debconf'ed?
+MAILTO=root@localhost
+
