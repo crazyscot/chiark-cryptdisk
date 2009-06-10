@@ -24,5 +24,7 @@ Description: encrypted backup drive scripts
  .
  WARNING: Merely installing this package does not mean you have achieved 
  encrypted backups! You must set up a cron job to perform the actual backup,
- in whatever format is appropriate.
+ in whatever format is appropriate. You must also back up the contents
+ of /etc/chiark-cryptdisk/keys in some other way. (We suggest creating
+ a tarball, encrypting it with GPG -c, and storing it on a USB stick.)
 
