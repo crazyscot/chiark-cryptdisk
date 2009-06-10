@@ -9,14 +9,14 @@ Package: chiark-cryptdisk
 Section: admin
 Priority: extra
 Architecture: all
-Depends: dmsetup, bsdmainutils, cryptsetup, chiark-utils-bin (>= 4.0.0), chiark-backup
+Depends: dmsetup, bsdmainutils, cryptsetup, chiark-utils-bin (>= 4.0.0)
+Suggests: chiark-backup
 Description: encrypted backup drive scripts
  These are the encrypted backup helper scripts used by various systems
  belonging to the Sinister Greenend Organisation. Features:
   * back up to any random-access block device
-  * backups are strongly encrypted using AES
   * contents of backup media are indistinguishable from random data,
-    to the casual observer
+    to the casual observer, and are strongly encrypted using AES.
  .
  This package contains the main utility scripts for creating keys and
  initialising new backup devices. (Recommended: SATA drives
