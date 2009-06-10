@@ -35,7 +35,8 @@ install: build
 	$(MAKE) -C $(PKG) install \
 	  	prefix=$(pfx) \
 	  	libdir=$(pfx)/usr/lib/chiark-cryptdisk \
-		sbindir=$(pfx)/usr/sbin
+		sbindir=$(pfx)/usr/sbin \
+		mandir=$(pfx)/usr/share/man
 
 binary-indep: build install
 
