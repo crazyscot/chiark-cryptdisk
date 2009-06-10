@@ -1,37 +1,74 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH CHIARK\-CRYPTDISK\-MAKE\-KEY 8 "9th July 2008" "Greenend" "chiark utilities"
+.TH CHIARK\-CRYPTDISK\-INITIALISE\-DISK 8 "10th June 2009" "Greenend" "chiark utilities"
 .SH NAME
-chiark\-cryptdisk\-make\-key \- create crypto keyset
+chiark\-cryptdisk\-initialise\-disk \- initialise encrypted media
 .SH SYNOPSIS
-.BR chiark\-cryptdisk\-make\-key 
+.BR chiark\-cryptdisk\-initialise\-disk
+.RB [
+.IR \-\-fill
+.RB ] 
+.I disk\-id
 .SH DESCRIPTION
 .B chiark-cryptdisk-initialise-disk
-is a tool for WRITEME
+is the media preparation utility for the 
+.B chiark-cryptdisk
+package.
+
+This tool looks to see whether the inserted disk already contains anything,
+by reading its first sector; if so, it refuses to do anything as a safety
+catch.
+
+An empty disk will be indoctrinated into this system and formatted using
+.B mkfs(8).
+This may take a few minutes depending on your system's CPU speed.
+
+The first sector of the drive will be set up to contain your site's
+magic identifier, the identifier of the key the drive uses and some
+random padding.
+
+If you want to reinitialise a disk (say, to make it use a new key),
+you must first zero out the first sector of the physical drive, for
+example using the 
+.I dd
+utility.
+
+.SH OPTIONS
+.B \-\-fill
+Fills the encrypted device with zeros before formatting it.
+This is recommended, but may take many hours depending on the size of the
+drive and the time your system takes to encrypt potentially many gigabytes
+of zeros.
 
 .SH SECURITY
-WRITEME
+You are recommended to always use the 
+.B \-\-fill
+option. By filling the physical drive with what appears to be random data
+you will confound an attacker who attempts to perform traffic analysis.
+
 .SH EXIT STATUS
 .TP
 .B 0
 All went well and there were no warnings.
 .TP
 any other
-WRITEME
+Something went wrong; you should read the output to figure out what.
 .SH FILES
 .TP
-.B WRITEME
-Default configuration file.  (Override with
-.BR -C .)
+.B /etc/chiark-cryptdisk/config
+Default configuration file.
+.TP
+.B /etc/chiark-cryptdisk/keys
+Keystore.
 
 .SH BUGS
 Probably some.
 
 .SH AUTHOR
-This manual page was written by Ross Youger <wry-deb@impropriety.org.uk>
-in 2008, but may be used by anyone.
+This manual page was written by Ross Younger <wry-deb@impropriety.org.uk>
+in 2009, but may be used by anyone.
 .SH COPYRIGHT
 .B chiark-cryptdisk-make-key
-was written by Ian Jackson <ian@chiark.greenend.org.uk> in XXX.
+was written by Ian Jackson <ian@chiark.greenend.org.uk>.
 
 The chiark-cryptdisk package is free software; you can redistribute it
 and/or modify it under the terms of the GNU General Public License as
@@ -47,4 +84,4 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, consult the Free Software Foundation's
 website at www.fsf.org, or the GNU Project website at www.gnu.org.
 .SH SEE ALSO
-.BR chiark-cryptdisk-initialise-disc "(8), "
+.BR chiark-cryptdisk-make-key "(8)"

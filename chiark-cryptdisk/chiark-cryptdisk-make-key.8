@@ -1,37 +1,64 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH CHIARK\-CRYPTDISK\-MAKE\-KEY 8 "9th July 2008" "Greenend" "chiark utilities"
+.TH CHIARK\-CRYPTDISK\-MAKE\-KEY 8 "10th June 2009" "Greenend" "chiark utilities"
 .SH NAME
 chiark\-cryptdisk\-make\-key \- create crypto keyset
 .SH SYNOPSIS
 .BR chiark\-cryptdisk\-make\-key 
 .SH DESCRIPTION
 .B chiark-cryptdisk-make-key
-is a tool for WRITEME
+is the key creation and rollover tool for the 
+.B chiark-cryptdisk
+package.
+
+On invocation, a new key is created and made the default for new disks
+created with 
+.BR chiark-cryptdisk-initialise-disk "(8)" .
+The first time this tool is invoked, it also creates a magic-identifier
+which is written out to created disks to identify them as belonging
+to this system.
+
+.S NOTE
+Old keys are never automatically removed, as they may still be used by
+disks already in the system.
+
+This tool does 
+.B not
+change the key used to encrypt any disk currently in the system. If you
+want to change a disk's key, you must reinitialise it using
+.B chiark-cryptdisk-initialise-disk.
 
 .SH SECURITY
-WRITEME
+The keys are stored in /etc/chiark-cryptdisk/keys. They are not encrypted
+in any way.
+After running this tool you should immediately back up the key on other
+media, ideally encrypted in some way which does not require the presence 
+of these keys. (For example, you might use GPG's 
+.I -c
+option.)
 .SH EXIT STATUS
 .TP
 .B 0
 All went well and there were no warnings.
 .TP
 any other
-WRITEME
+Something went wrong; you should read the output to figure out what.
 .SH FILES
 .TP
-.B WRITEME
-Default configuration file.  (Override with
-.BR -C .)
+.B /etc/chiark-cryptdisk/config
+Default configuration file.
+.TP
+.B /etc/chiark-cryptdisk/keys
+Keystore.
 
 .SH BUGS
 Probably some.
 
 .SH AUTHOR
-This manual page was written by Ross Youger <wry-deb@impropriety.org.uk>
-in 2008, but may be used by anyone.
+This manual page was written by Ross Younger <wry-deb@impropriety.org.uk>
+in 2009, but may be used by anyone.
 .SH COPYRIGHT
 .B chiark-cryptdisk-make-key
-was written by Ian Jackson <ian@chiark.greenend.org.uk> in XXX.
+was written by Ian Jackson <ian@chiark.greenend.org.uk>.
 
 The chiark-cryptdisk package is free software; you can redistribute it
 and/or modify it under the terms of the GNU General Public License as
@@ -47,4 +74,4 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, consult the Free Software Foundation's
 website at www.fsf.org, or the GNU Project website at www.gnu.org.
 .SH SEE ALSO
-.BR chiark-cryptdisk-initialise-disc "(8), "
+.BR chiark-cryptdisk-initialise-disk "(8)"
