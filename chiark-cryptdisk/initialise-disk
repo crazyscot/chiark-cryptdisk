@@ -34,7 +34,7 @@ if $fill; then
 fi
 
 printf "making %s filesystem... " "$fstype"
-mkfs -t $fstype $mkfs_fs_options /dev/mapper/$mapname
+nice mkfs -t $fstype $mkfs_fs_options /dev/mapper/$mapname
 echo done.
 
 printf "writing disk-id %s... " "$disk_id"
