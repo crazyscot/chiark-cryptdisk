@@ -39,8 +39,7 @@ txtdocdir=$(prefix)/share/doc/chiark-cryptdisk
 exampledir=$(txtdocdir)/examples
 
 ETCFILES=config
-LIBFILES=examine functions invoke main main.bigtmp-subdirs main.mirror-subdirs\
-	 make-space search-for-sata unmount
+LIBFILES=examine functions search-for-sata unmount
 SCRIPTS=initialise-disk make-key
 
 MANPAGES5=	
