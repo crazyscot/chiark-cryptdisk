@@ -1,3 +1,10 @@
+chiark-cryptdisk (0.2) UNRELEASED; urgency=low
+
+  * Update scripts with my tweaks.
+  * Write manpages. 
+
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Wed, 10 Jun 2009 23:51:27 +0100
+
 chiark-cryptdisk (0.1) UNRELEASED; urgency=low
 
   * Initial packaging.
