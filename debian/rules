@@ -13,11 +13,6 @@ packages_indep=	chiark-cryptdisk
 packages_arch=	
 packages=	$(packages_indep) $(packages_arch)
 
-# XXX KILL THESE:
-cwd=	$(shell pwd)
-d=	$(cwd)/debian
-t=	$d/tmp
-
 build:
 	dh_testdir
 	set -e; for s in $(subdirs_build); do $(MAKE) -C $$s all; done
