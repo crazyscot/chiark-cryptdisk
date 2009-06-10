@@ -23,4 +23,7 @@ if test ${NO_RMMOD} = 0; then
 	fi
 fi
 
-echo 'all detached.'
+/sbin/hdparm -qf /dev/$dev
+/sbin/hdparm -Y /dev/$dev
+
+echo 'all detached and sent to sleep.'
