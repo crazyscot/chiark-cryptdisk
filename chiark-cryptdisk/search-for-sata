@@ -9,7 +9,24 @@ if ! lsmod | egrep '^'${MODULE}' ' >/dev/null \
 	sleep 1
 fi
 
-find /sys/devices -path '*/driver' -lname '*'${MODULE}'*' -print \
- | perl -pe 's,/driver$,,' \
- | xargs -I @ find @ -path '*/host*/target*/*:*:*:*/block:*' -print \
- | perl -pe 's,.*:,,'
+MajorV=`uname -r | cut -d. -f1-2`
+MinorV=`uname -r | cut -d. -f3-`
+MinVer=`echo ${MinorV} | cut -d- -f1`
+
+# At some point between 2.6.26 and 2.6.32, the sysfs devices
+# interface changed. It would be nice if I could quickly find out how!
+
+if [ "${MajorV}" == "2.6" ] && [ "${MinVer}" -le 26 ]; then
+	# known to work on 2.6.26
+	find /sys/devices -path '*/driver' -lname '*'${MODULE}'*' -print \
+	 | perl -pe 's,/driver$,,' \
+	 | xargs -I @ find @ -path '*/host*/target*/*:*:*:*/block:*' -print \
+	 | perl -pe 's,.*:,,'
+else
+	# known to work on 2.6.32
+	# there's probably a better way to do this
+	find /sys/devices -path '*/driver' -lname '*'${MODULE}'*' -print \
+	 | perl -pe 's,/driver$,,' \
+	 | xargs -I @ find @ -maxdepth 5 -path '*/host*/target*/*:*:*:*/block/*' -print \
+	 | perl -pe 's,.*/,,'
+fi

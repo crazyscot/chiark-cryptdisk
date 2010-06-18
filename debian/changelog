@@ -1,9 +1,15 @@
-chiark-cryptdisk (0.2) UNRELEASED; urgency=low
+chiark-cryptdisk (0.2.1) unstable; urgency=low
+
+  * search-for-sata: Add logic to detect and cope with 2.6.32-style sysfs. 
+
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Fri, 18 Jun 2010 17:39:36 +0100
+
+chiark-cryptdisk (0.2) unstable; urgency=low
 
   * Update scripts with my tweaks.
   * Write manpages. 
 
- -- Ross Younger <wry-deb@impropriety.org.uk>  Wed, 10 Jun 2009 23:51:27 +0100
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Fri, 18 Jun 2010 17:39:19 +0100
 
 chiark-cryptdisk (0.1) UNRELEASED; urgency=low
 
