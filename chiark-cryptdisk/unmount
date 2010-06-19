@@ -24,6 +24,10 @@ if test ${NO_RMMOD} = 0; then
 fi
 
 /sbin/hdparm -qf /dev/$dev
-/sbin/hdparm -Y /dev/$dev
 
-echo 'all detached and sent to sleep.'
+if [ "x${SLEEP_DRIVE}" = "xy" ] || [ "x${SLEEP_DRIVE}" = "xyes" ]; then
+	/sbin/hdparm -qY /dev/$dev
+fi
+
+echo ok
+

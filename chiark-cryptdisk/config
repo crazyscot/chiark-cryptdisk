@@ -4,6 +4,12 @@
 MODULE=sata_sil
 NO_RMMOD=1
 
+# TODO: Make me debconf'ed?
+MAILTO=root@localhost
+
+# Do we want to send the drive to sleep when we're finished?
+SLEEP_DRIVE=no
+
 dev=`/usr/lib/chiark-cryptdisk/search-for-sata ${MODULE}`
 mapname=cryptbackup
 fstype=ext2
@@ -11,7 +17,4 @@ mkfs_fs_options='-q'
 mnt=/var/tmp/chiark-cryptdisk/mnt
 TMP=/var/tmp/chiark-cryptdisk/tmp
 KEYS=/etc/chiark-cryptdisk/keys
-
-# TODO: Make me debconf'ed?
-MAILTO=root@localhost
 
