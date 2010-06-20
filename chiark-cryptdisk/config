@@ -10,6 +10,7 @@ MAILTO=root@localhost
 # Do we want to send the drive to sleep when we're finished?
 SLEEP_DRIVE=no
 
+lib=/usr/lib/chiark-cryptdisk
 dev=`/usr/lib/chiark-cryptdisk/search-for-sata ${MODULE}`
 mapname=cryptbackup
 fstype=ext2
