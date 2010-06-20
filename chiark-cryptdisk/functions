@@ -45,6 +45,19 @@ undo_mount () {
 	umount /dev/mapper/$mapname
 }
 
+do_fsck () {
+	RV=0
+	fsck -a -T -t $fstype /dev/mapper/$mapname || RV=$?
+	case "$RV" in
+		0) ;;
+	 	1) echo "fsck preened - filesystem was modified but is ok" ;;
+		*) 	echo "ERROR: fsck failed with code $RV! Manual attention required."
+			exit 5 ;;
+	esac
+# CAUTION: on ext2, '-a' maps to '-p' - preen - only make safe repairs.
+# This may not be the case for other filesystems.
+}
+
 do_identify () {
 	printf 'reading partition table... '
 	our_dd count=1 if=/dev/$dev of=${TMP}/dev-parttable

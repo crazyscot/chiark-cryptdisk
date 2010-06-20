@@ -9,6 +9,9 @@ test $# = 0 || fail "usage: .../examine [--rw]"
 
 do_identify
 do_dmsetup $keyid
+if [ "x${FSCK_ON_MOUNT}" = "xy" ] || [ "x${FSCK_ON_MOUNT}" = "xyes" ]; then
+	do_fsck
+fi
 do_mount $ro
 echo 'mounted.'
 egrep . /dev/null $mnt/disk-id ||:
