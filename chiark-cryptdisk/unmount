@@ -25,6 +25,10 @@ fi
 
 /sbin/hdparm -qf /dev/$dev
 
+if [ "x${STANDBY_DRIVE}" = "xy" ] || [ "x${STANDBY_DRIVE}" = "xyes" ]; then
+	/sbin/hdparm -qy /dev/$dev
+fi
+
 if [ "x${SLEEP_DRIVE}" = "xy" ] || [ "x${SLEEP_DRIVE}" = "xyes" ]; then
 	/sbin/hdparm -qY /dev/$dev
 fi

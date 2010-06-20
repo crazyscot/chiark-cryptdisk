@@ -7,7 +7,8 @@ NO_RMMOD=1
 # TODO: Make me debconf'ed?
 MAILTO=root@localhost
 
-# Do we want to send the drive to sleep when we're finished?
+# Do we want to send the drive to standby or to sleep when we're finished?
+STANDBY_DRIVE=yes
 SLEEP_DRIVE=no
 
 # Do we want to try to fsck on mount? Usually you do.

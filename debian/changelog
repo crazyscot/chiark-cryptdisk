@@ -1,11 +1,12 @@
 chiark-cryptdisk (0.2.1) unstable; urgency=low
 
   * search-for-sata: Add logic to detect and cope with 2.6.32-style sysfs. 
-  * config: add SLEEP_DRIVE param
-  * unmount: hdparm -Y only if SLEEP_DRIVE == "y" or "yes". 
+  * config: add STANDBY_DRIVE and SLEEP_DRIVE param
+  * unmount: hdparm -Y only if SLEEP_DRIVE == "y" or "yes". hdparm -y if
+  STANDBY_DRIVE == y or yes.
   * config: add FSCK_ON_MOUNT option
 
- -- Ross Younger <wry-deb@impropriety.org.uk>  Sun, 20 Jun 2010 09:53:40 +0100
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Sun, 20 Jun 2010 10:02:11 +0100
 
 chiark-cryptdisk (0.2) unstable; urgency=low
 
