@@ -1,8 +1,9 @@
 chiark-cryptdisk (0.2.2) unstable; urgency=low
 
-  * Actually install the documentation. 
+  * Improve the documentation and actually install it. 
+  * Add chiark-cryptdisk-backup[.withlock] scripts.
 
- -- Ross Younger <wry-deb@impropriety.org.uk>  Wed, 23 Jun 2010 15:12:17 +0100
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Wed, 23 Jun 2010 15:29:53 +0100
 
 chiark-cryptdisk (0.2.1) unstable; urgency=low
 
