@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+LOCKFILE=/var/lock/chiark-cryptdisk-backup
+with-lock-ex -w $LOCKFILE /usr/lib/chiark-cryptdisk/cryptdisk-backup.withlock "$@"
+

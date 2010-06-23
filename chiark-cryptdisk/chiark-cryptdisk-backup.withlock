@@ -1,0 +1,65 @@
+#!/bin/bash -e
+# Sample backup script for use with chiark-cryptdisk.
+# Copyright 2008-2010 W. Ross Younger.
+# 
+# The chiark utilities are all free software; you can redistribute them
+# and/or modify them under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3 of the
+# License, or (at your option) any later version.
+
+
+# Usage: (no options)
+
+. /etc/chiark-cryptdisk/config
+
+#DRYRUN=--dry-run
+
+#############################################
+mountcrypt() {
+	$lib/examine --rw > /dev/null || (echo Could not mountcrypt ':(' && false)
+}
+
+umountcrypt() {
+	$lib/unmount
+}
+
+closeall() {
+	umountcrypt
+}
+
+#############################################
+
+trap closeall ERR
+
+mountcrypt
+
+# TODO: Ensure there's enough space on the disk by removing older backups until there is... Or, at least, some reporting process should do so.
+
+DISKID=`cat $mnt/disk-id`
+
+stamp=`date`
+stampfn=`date +%Y%m%d%H%M`
+STAMP_DISK=$mnt/stamp
+
+SRC=/
+DST=${mnt}/snap.${stampfn}
+
+CATALOGUE=/etc/backup-catalogue/$DISKID
+STAMP_CAT=$CATALOGUE/${stampfn}
+
+prev=`cat $STAMP_DISK` 2>/dev/null || prev="nonexistent"
+PREVBACKUP=${mnt}/snap.${prev}
+
+echo "This is backup snap shot ${stampfn}; this disk's prev is ${prev}"
+
+#set -x
+rsync -ax --delete $DRYRUN --link-dest=${PREVBACKUP} $SRC/ $DST
+#set +x
+
+echo $stampfn > $STAMP_DISK
+mkdir -p $CATALOGUE
+echo $stampfn > $STAMP_CAT
+
+closeall > /dev/null
+
+echo "- completed ok"

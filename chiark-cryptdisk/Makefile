@@ -39,7 +39,8 @@ txtdocdir=$(prefix)/share/doc/chiark-cryptdisk
 exampledir=$(txtdocdir)/examples
 
 ETCFILES=config
-LIBFILES=examine functions search-for-sata unmount
+LIBFILES=examine functions search-for-sata unmount \
+		 chiark-cryptdisk-backup chiark-cryptdisk-backup.withlock
 SCRIPTS=initialise-disk make-key
 
 MANPAGES5=	
