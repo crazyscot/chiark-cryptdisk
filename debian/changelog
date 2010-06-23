@@ -1,3 +1,9 @@
+chiark-cryptdisk (0.2.2) unstable; urgency=low
+
+  * Actually install the documentation. 
+
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Wed, 23 Jun 2010 15:12:17 +0100
+
 chiark-cryptdisk (0.2.1) unstable; urgency=low
 
   * search-for-sata: Add logic to detect and cope with 2.6.32-style sysfs. 
