@@ -11,7 +11,8 @@ chiark-utils-maint@chiark.greenend.org.uk.
 The software included is:
 
 chiark-cryptdisk: encrypted backup drive scripts
- Copyright Ian Jackson <ian@chiark.greenend.org.uk>
+ Copyright 2001-2010 Ian Jackson <ian@chiark.greenend.org.uk>
+ Portions copyright 2007-2010 W Ross Younger <ryounger@chiark.greenend.org.uk>
 
 The chiark utilities are all free software; you can redistribute them
 and/or modify them under the terms of the GNU General Public License

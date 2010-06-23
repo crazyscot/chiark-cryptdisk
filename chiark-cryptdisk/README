@@ -1,20 +1,43 @@
+=======================================================================
+I. Setup
+
 1. Teach the scripts how to detect your backup drive.
    This typically means figuring out the kernel module needed 
    See /usr/lib/chiark-cryptdisk/search-for-sata.
-   Set the module name in /etc/chiark-cryptdisk/config.
+   Set the module name (and your other preferences) in
+   /etc/chiark-cryptdisk/config.
 
 2. Create an initial key with chiark-cryptdisk-make-key
+
 3. Create one or more backup drives using chiark-cryptdisk-initialisedisk.
    We recommend you use the --fill option which fills the encrypted drive
    with zeroes (i.e. what looks to an observer like random data) before
    creating the filesystem on it.
+
 4. Every now and then - perhaps before adding a new drive - roll over to
    a new key, with chiark-cryptdisk-make-key.
 
-XXX TODO: Add hdparm -qf DEVICE and hdparm -Y DEVICE to make it flush and sleep?
+Keys are stored in /etc/chiark-cryptdisk/keys. YOU MUST BACK THIS
+DIRECTORY UP BY OTHER MEANS; without a copy, you will be unable to read
+your backups if you ever need to rely on them!  Put it on a USB stick,
+burn it onto a CD, doesn't quite matter what, but you will need the
+contents of that directory - along with the scripts in this package -
+if you need to mount a cryptdisk on another system or restore from it.
 
-Depends: dmsetup, bsdmainutils, cryptsetup
+=======================================================================
+II. Interacting with the encrypted drives
 
-Keys are stored in /etc/chiark-cryptdisk/keys. YOU MUST BACK THIS DIRECTORY UP BY OTHER MEANS; without a copy, you will be unable to read your backups if you ever need to rely on them!
-Put it on a USB stick, burn it onto a CD, doesn't quite matter what, but you will need the contents of that directory - along with the scripts in this package - if you need to mount a cryptdisk on another system or restore from it.
+* To mount the drive, run `/usr/lib/chiark-cryptdisk/examine' as root.
+  If you want to mount it read-write, add the option `--rw'.
+
+* How you back up your data is up to you, but see below.
+
+* When you are finished, run `/usr/lib/chiark-cryptdisk/umount'.
+
+We provide /usr/lib/chiark-cryptdisk/chiark-cryptdisk-backup[.withlock]
+as a suggestion for an integrated backup script, suitable for running from
+root's crontab; take careful note of its use of rsync's `--link-dest'
+mode.
+
+=======================================================================
 

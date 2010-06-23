@@ -1,0 +1,4 @@
+* Make preferences go via debconf
+* Automatically purge old backups according to some appropriate
+  (user-specified?) rule
+* Improve reporting
