@@ -40,6 +40,7 @@ exampledir=$(txtdocdir)/examples
 
 ETCFILES=config
 LIBFILES=examine functions search-for-sata unmount \
+		 search-for-usb \
 		 chiark-cryptdisk-backup chiark-cryptdisk-backup.withlock
 SCRIPTS=initialise-disk make-key
 
