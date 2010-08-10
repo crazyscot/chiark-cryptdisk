@@ -1,0 +1,28 @@
+#!/bin/bash -e
+# Detects a USB-attached hard drive given the USB vendor/device ID.
+# Only works if there is one matching device on the system.
+# Known to work with kernel version 2.6.32-24 - YMMV.
+#
+# N.B. that it's probably better to write a udev rule for your system
+# so you can write e.g. dev=mybakdrive in /etc/chiark-cryptdisk/config ...
+# e.g. in /etc/udev/rules.d/99bakdrive.rules: SUBSYSTEM=="block", SUBSYSTEMS=="usb", ATTRS{idVendor}=="040d", ATTRS{idProduct}=="6208", SYMLINK+="bakdrive"
+#
+# Usage: search-for-usb 1234:5678
+
+DEVICE=$1
+
+usb=`lsusb -d $DEVICE`
+# Bus 001 Device 006: ID 040d:6208 VIA Technologies, Inc.
+
+ndevs=`echo $usb | wc -l`
+case "$ndevs" in
+	0) echo No device found; exit 2 ;;
+	1) ;;
+	*) echo "$ndevs devices found; only 1 supported" ; exit 2 ;;
+esac
+
+bus=`echo ${usb} | cut '-d ' -f2`
+dev=`echo ${usb} | cut '-d ' -f4 | sed -e s,:.*,,`
+syspath=/sys`udevadm info -q path -n /dev/bus/usb/$bus/$dev`
+
+find $syspath -path '*/host*/target*/*:*:*:*/block' -print | xargs ls -L
