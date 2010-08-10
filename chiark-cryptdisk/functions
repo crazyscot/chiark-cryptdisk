@@ -12,6 +12,11 @@ case "$dev" in
 *)	;;
 esac
 
+# cope with symlinks (e.g. made by udev)
+if [ -L /dev/$dev ]; then
+    dev=`basename $(readlink -f /dev/$dev)`
+fi
+
 echo "using device $dev"
 echo "using devmapper name $mapname"
 echo "using mountpoint $mnt"
