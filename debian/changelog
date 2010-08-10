@@ -1,3 +1,9 @@
+chiark-cryptdisk (0.2.3) lucid; urgency=low
+
+  * search-for-sata shebang should be bash, not sh.
+
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Tue, 10 Aug 2010 21:00:26 +0100
+
 chiark-cryptdisk (0.2.2) unstable; urgency=low
 
   * Improve the documentation and actually install it. 
