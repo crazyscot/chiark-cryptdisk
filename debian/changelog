@@ -1,10 +1,11 @@
-chiark-cryptdisk (0.2.3) lucid; urgency=low
+chiark-cryptdisk (0.2.3) unstable; urgency=low
 
   * search-for-sata shebang should be bash, not sh.
   * create search-for-usb script 
   * functions: resolve symlinks in the device name 
+  * actually install changelog (oops!)
 
- -- Ross Younger <0ryoungerk.launchpad@coriolis.greenend.org.uk>  Wed, 11 Aug 2010 00:00:12 +0100
+ -- Ross Younger <wry-deb@impropriety.org.uk>  Wed, 11 Aug 2010 00:36:28 +0100
 
 chiark-cryptdisk (0.2.2) unstable; urgency=low
 
