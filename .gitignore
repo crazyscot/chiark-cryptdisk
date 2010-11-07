@@ -1,0 +1,5 @@
+/build
+/debian/files
+/debian/chiark-cryptdisk
+/debian/chiark-cryptdisk.debhelper.log
+/debian/chiark-cryptdisk.substvars
