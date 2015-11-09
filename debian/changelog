@@ -2,6 +2,8 @@ chiark-cryptdisk (0.2.3ubuntu1) UNRELEASED; urgency=medium
 
   * Horrid workaround to umount() returning too quickly.
   * Update to debhelper compat level 9 
+  * Add lintian override for non-standard-dir-perm on
+  etc/chiark-cryptdisk/keys
 
  -- Ross Younger <0ryoungerk.launchpad@coriolis.greenend.org.uk>  Mon, 09 Nov 2015 16:17:08 +1300
 
