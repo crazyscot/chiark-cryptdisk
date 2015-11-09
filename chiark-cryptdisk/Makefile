@@ -39,7 +39,8 @@ txtdocdir=$(prefix)/share/doc/chiark-cryptdisk
 exampledir=$(txtdocdir)/examples
 
 ETCFILES=config
-LIBFILES=examine functions search-for-sata unmount \
+LIBFILES=functions
+LIBFILES_EXEC=examine search-for-sata unmount \
 		 search-for-usb \
 		 chiark-cryptdisk-backup chiark-cryptdisk-backup.withlock
 SCRIPTS=initialise-disk make-key
@@ -61,6 +62,8 @@ install:
 		$(INSTALL_SHARE) .dummy $(etcdir)/keys
 		$(INSTALL_DIRECTORY) $(libdir)
 		set -e; for f in $(LIBFILES); do \
+			$(INSTALL_SHARE) $$f $(libdir)/$$f; done
+		set -e; for f in $(LIBFILES_EXEC); do \
 			$(INSTALL_SCRIPT) $$f $(libdir)/$$f; done
 
 # Not called by debhelper; see debian/chiark-cryptdisk.manpages
