@@ -3,7 +3,9 @@ SUBDIRS=chiark-cryptdisk
 PKG=chiark-cryptdisk
 pfx=$(CURDIR)/debian/$(PKG)
 
-all %:
+all:
+
+%:
 	set -e; for s in $(SUBDIRS); do \
 		$(MAKE) -C $$s $@ \
 			prefix=$(pfx) \
