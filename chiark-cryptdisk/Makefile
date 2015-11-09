@@ -63,6 +63,7 @@ install:
 		set -e; for f in $(LIBFILES); do \
 			$(INSTALL_SCRIPT) $$f $(libdir)/$$f; done
 
+# Not called by debhelper; see debian/chiark-cryptdisk.manpages
 install-docs:
 		$(INSTALL_DIRECTORY) $(man8dir)
 		set -e; for f in $(MANPAGES8); do \

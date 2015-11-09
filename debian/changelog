@@ -4,6 +4,7 @@ chiark-cryptdisk (0.2.3ubuntu1) UNRELEASED; urgency=medium
   * Update to debhelper compat level 9 
   * Add lintian override for non-standard-dir-perm on
   etc/chiark-cryptdisk/keys
+  * Correctly install manpages
 
  -- Ross Younger <0ryoungerk.launchpad@coriolis.greenend.org.uk>  Mon, 09 Nov 2015 16:17:08 +1300
 
