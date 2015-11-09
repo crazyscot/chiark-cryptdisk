@@ -3,7 +3,7 @@ Section: admin
 Priority: extra
 Maintainer: Ross Younger <wry-deb@impropriety.org.uk>
 Standards-Version: 3.2.1.0
-Build-Depends: debhelper (>> 3.0.0)
+Build-Depends: debhelper (>= 9)
 
 Package: chiark-cryptdisk
 Section: admin
