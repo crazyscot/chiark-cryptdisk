@@ -48,6 +48,7 @@ do_mount () {
 }
 undo_mount () {
 	umount /dev/mapper/$mapname
+	sleep 1 # wry 20151109: Seems that undo_dmsetup sometimes fails as the umount can return before it has fully completed. This is a horrid workaround for the time being.
 }
 
 do_fsck () {
